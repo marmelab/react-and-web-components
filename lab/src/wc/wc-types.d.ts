@@ -16,6 +16,12 @@ declare module "react" {
         onProbeEvent?: (e: Event) => void;
         "onprobe-event"?: (e: Event) => void;
       }>;
+      "media-player": WC<{
+        src?: string;
+        "video-title"?: string;
+        volume?: number;
+        onPlayStateChange?: (e: Event) => void;
+      }>;
     }
   }
 }
