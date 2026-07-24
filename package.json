@@ -1,0 +1,9 @@
+{
+  "name": "react-web-components-hackday",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter lab dev",
+    "dev:ssr": "pnpm --filter lab dev:ssr",
+    "typecheck": "pnpm -r typecheck"
+  }
+}
