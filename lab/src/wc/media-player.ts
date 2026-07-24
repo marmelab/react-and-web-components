@@ -11,6 +11,7 @@ export class MediaPlayer extends HTMLElement {
   #seek: HTMLInputElement;
   #resets = 0;
   #lastTime = 0;
+  #appliedSrc: string | null = null;
 
   constructor() {
     super();
@@ -57,9 +58,10 @@ export class MediaPlayer extends HTMLElement {
 
     this.#video.addEventListener("play", () => this.#emitPlayState(true));
     this.#video.addEventListener("pause", () => this.#emitPlayState(false));
-    this.#video.addEventListener("emptied", () =>
-      this.#countReset("emptied (src reset)"),
-    );
+    this.#video.addEventListener("emptied", () => {
+      this.#countReset("emptied (src reset)");
+      this.#lastTime = 0;
+    });
     this.#video.addEventListener("timeupdate", () => {
       const t = this.#video.currentTime;
       if (t < this.#lastTime - 0.5)
@@ -92,8 +94,10 @@ export class MediaPlayer extends HTMLElement {
       "media-player",
       `attributeChangedCallback ${name}: ${JSON.stringify(oldV)} → ${JSON.stringify(newV)}`,
     );
-    if (name === "src" && newV && this.#video.src !== newV)
+    if (name === "src" && newV && newV !== this.#appliedSrc) {
+      this.#appliedSrc = newV;
       this.#video.src = newV;
+    }
     if (name === "video-title") this.#titleEl.textContent = newV ?? "";
   }
 
