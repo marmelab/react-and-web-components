@@ -24,6 +24,13 @@ declare module "react" {
       }>;
       "inner-app": WC<{ greeting?: string }>;
       "reaction-card": WC<{ title?: string; count?: number; highlighted?: boolean }>;
+      "media-controller": WC;
+      "media-control-bar": WC;
+      "media-play-button": WC;
+      "media-time-range": WC;
+      "media-time-display": WC;
+      "media-mute-button": WC;
+      "media-volume-range": WC;
     }
   }
 }

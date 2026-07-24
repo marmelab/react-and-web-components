@@ -9,6 +9,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "media-chrome": "^4.19.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

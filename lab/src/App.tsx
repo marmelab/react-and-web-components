@@ -30,6 +30,10 @@ export const routes: Record<string, Route> = {
     title: "4. Perf",
     Component: lazy(() => import("./experiments/perf/PerfPage")),
   },
+  "/media-chrome": {
+    title: "5. media-chrome",
+    Component: lazy(() => import("./experiments/media-chrome/MediaChromePage")),
+  },
   // Experiment tasks append entries here, e.g.:
 };
 
