@@ -27,11 +27,23 @@ export default function NestingPage() {
     };
   }, [mounted]);
 
+  const rapidId = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (rapidId.current) clearInterval(rapidId.current);
+    };
+  }, []);
+
   const rapidRemount = () => {
+    if (rapidId.current) clearInterval(rapidId.current);
     let flips = 0;
-    const id = setInterval(() => {
+    rapidId.current = setInterval(() => {
       setMounted((m) => !m);
-      if (++flips >= 20) clearInterval(id);
+      if (++flips >= 20) {
+        if (rapidId.current) clearInterval(rapidId.current);
+        rapidId.current = null;
+      }
     }, 50);
   };
 

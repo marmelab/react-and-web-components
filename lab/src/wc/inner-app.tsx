@@ -37,18 +37,21 @@ class InnerAppElement extends HTMLElement {
   connectedCallback() {
     logEvent("inner-app", "connectedCallback → createRoot(shadowRoot)");
     const shadow = this.shadowRoot ?? this.attachShadow({ mode: "open" });
-    this.#root = createRoot(shadow);
+    if (!this.#root) this.#root = createRoot(shadow);
     this.#render();
   }
 
   disconnectedCallback() {
     logEvent(
       "inner-app",
-      "disconnectedCallback → root.unmount() (deferred via queueMicrotask)",
+      "disconnectedCallback → root.unmount() (deferred via queueMicrotask, isConnected-checked)",
     );
-    const root = this.#root;
-    queueMicrotask(() => root?.unmount());
-    this.#root = null;
+    queueMicrotask(() => {
+      if (!this.isConnected) {
+        this.#root?.unmount();
+        this.#root = null;
+      }
+    });
   }
 
   attributeChangedCallback() {
