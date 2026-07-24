@@ -18,6 +18,10 @@ export const routes: Record<string, Route> = {
     title: "1. Lifecycle",
     Component: lazy(() => import("./experiments/lifecycle/LifecyclePage")),
   },
+  "/stability": {
+    title: "2. Stability",
+    Component: lazy(() => import("./experiments/stability/StabilityPage")),
+  },
   // Experiment tasks append entries here, e.g.:
 };
 
