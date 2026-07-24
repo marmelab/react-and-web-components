@@ -9,17 +9,27 @@ let entries: LogEntry[] = [];
 let nextId = 1;
 const listeners = new Set<() => void>();
 
+function notify(): void {
+  listeners.forEach((l) => {
+    try {
+      l();
+    } catch {
+      // swallow errors; instrument must never break the code it observes
+    }
+  });
+}
+
 export function logEvent(source: string, message: string): void {
   entries = [
     ...entries,
     { id: nextId++, t: performance.now(), source, message },
   ];
-  listeners.forEach((l) => l());
+  notify();
 }
 
 export function clearLog(): void {
   entries = [];
-  listeners.forEach((l) => l());
+  notify();
 }
 
 export function subscribeLog(cb: () => void): () => void {
