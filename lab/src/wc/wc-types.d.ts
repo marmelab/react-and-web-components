@@ -23,6 +23,7 @@ declare module "react" {
         onPlayStateChange?: (e: Event) => void;
       }>;
       "inner-app": WC<{ greeting?: string }>;
+      "reaction-card": WC<{ title?: string; count?: number; highlighted?: boolean }>;
     }
   }
 }
