@@ -14,7 +14,7 @@ export function usePath(): string {
   return useSyncExternalStore(
     subscribe,
     () => window.location.pathname,
-    () => ssrPath,
+    () => (typeof window === "undefined" ? ssrPath : window.location.pathname),
   );
 }
 

@@ -51,7 +51,7 @@ export default function SsrPage() {
       <h3>Declarative Shadow DOM</h3>
       <div
         dangerouslySetInnerHTML={{
-          __html: `<figure><template shadowrootmode="open"><style>p{color:tomato;font-weight:bold}</style><p>DSD content — tomato+bold ⇒ shadow root was created</p></template><p>light-DOM fallback (visible ⇒ NO shadow root)</p></figure>`,
+          __html: `<div><template shadowrootmode="open"><style>p{color:tomato;font-weight:bold}</style><p>DSD content — tomato+bold ⇒ shadow root was created</p></template><p>light-DOM fallback (visible ⇒ NO shadow root)</p></div>`,
         }}
       />
       <LogPanel />
