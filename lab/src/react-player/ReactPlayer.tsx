@@ -69,7 +69,7 @@ export function ReactPlayer({
       <div
         style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 4 }}
       >
-        <button onClick={() => (playing ? v?.pause() : void v?.play())}>
+        <button onClick={() => { const vid = videoRef.current; if (!vid) return; playing ? vid.pause() : void vid.play(); }}>
           {playing ? "⏸" : "▶"}
         </button>
         <input
@@ -80,8 +80,9 @@ export function ReactPlayer({
           style={{ flex: 1 }}
           value={v?.duration ? (time / v.duration) * 100 : 0}
           onChange={(e) => {
-            if (v?.duration)
-              v.currentTime = (Number(e.target.value) / 100) * v.duration;
+            const vid = videoRef.current;
+            if (vid?.duration)
+              vid.currentTime = (Number(e.target.value) / 100) * vid.duration;
           }}
         />
         <span>{time.toFixed(1)}s</span>
@@ -93,7 +94,8 @@ export function ReactPlayer({
           defaultValue={1}
           title="volume"
           onChange={(e) => {
-            if (v) v.volume = Number(e.target.value);
+            const vid = videoRef.current;
+            if (vid) vid.volume = Number(e.target.value);
           }}
         />
       </div>
