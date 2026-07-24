@@ -22,6 +22,7 @@ declare module "react" {
         volume?: number;
         onPlayStateChange?: (e: Event) => void;
       }>;
+      "inner-app": WC<{ greeting?: string }>;
     }
   }
 }
