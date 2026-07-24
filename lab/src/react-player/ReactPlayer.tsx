@@ -63,7 +63,7 @@ export function ReactPlayer({
         style={{ width: "100%", background: "#000" }}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
-        onEmptied={() => countReset("emptied (src reset)")}
+        onEmptied={() => { countReset("emptied (src reset)"); lastTime.current = 0; }}
         onTimeUpdate={onTimeUpdate}
       />
       <div
@@ -98,7 +98,7 @@ export function ReactPlayer({
         />
       </div>
       <div style={{ font: "11px monospace", color: "#a00" }}>
-        resets: {resets}
+        resets: {resets} | dropped frames: {v?.getVideoPlaybackQuality ? v.getVideoPlaybackQuality().droppedVideoFrames : "n/a"}
       </div>
     </div>
   );
