@@ -60,6 +60,16 @@ export function App() {
         }}
       >
         <h1 style={{ fontSize: 18 }}>React 19 × Web Components Lab</h1>
+        <span
+          style={{
+            fontSize: 12,
+            padding: "2px 8px",
+            borderRadius: 10,
+            background: __COMPILER_ON__ ? "#cfc" : "#eee",
+          }}
+        >
+          React Compiler: {__COMPILER_ON__ ? "ON" : "OFF"}
+        </span>
         <nav style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {Object.entries(routes).map(([p, r]) => (
             <Link key={p} to={p}>
