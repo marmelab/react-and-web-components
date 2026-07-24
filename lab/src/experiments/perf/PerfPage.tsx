@@ -43,16 +43,18 @@ export default function PerfPage() {
     const t0 = performance.now();
     flushSync(mutate);
     const wallMs = performance.now() - t0;
-    setResults((rs) => [
-      ...rs,
-      {
-        scenario,
-        mode: currentMode,
-        n: currentN,
-        wallMs,
-        profilerMs: profilerMs.current,
-      },
-    ]);
+    flushSync(() =>
+      setResults((rs) => [
+        ...rs,
+        {
+          scenario,
+          mode: currentMode,
+          n: currentN,
+          wallMs,
+          profilerMs: profilerMs.current,
+        },
+      ]),
+    );
   };
 
   const runSuite = async () => {
