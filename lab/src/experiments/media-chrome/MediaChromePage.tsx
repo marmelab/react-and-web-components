@@ -7,12 +7,12 @@ import { StressHarness } from "../stability/StressHarness";
 
 export default function MediaChromePage() {
   const lastTime = useRef(0);
+  const resetSeq = useRef(0);
   const [resets, setResets] = useState(0);
   const countReset = (why: string) => {
-    setResets((r) => {
-      logEvent("media-chrome", `PLAYBACK RESET #${r + 1}: ${why}`);
-      return r + 1;
-    });
+    resetSeq.current += 1;
+    logEvent("media-chrome", `PLAYBACK RESET #${resetSeq.current}: ${why}`);
+    setResets(resetSeq.current);
   };
 
   return (

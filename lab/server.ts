@@ -35,4 +35,6 @@ app.use(async (req, res) => {
   }
 });
 
-app.listen(5199, () => console.log("SSR lab: http://localhost:5199"));
+app.listen(5199, "127.0.0.1", () =>
+  console.log("SSR lab: http://localhost:5199"),
+);

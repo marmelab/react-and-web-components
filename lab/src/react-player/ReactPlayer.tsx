@@ -13,6 +13,7 @@ export function ReactPlayer({
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const lastTime = useRef(0);
+  const resetSeq = useRef(0);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
   const [resets, setResets] = useState(0);
@@ -28,10 +29,9 @@ export function ReactPlayer({
   }, [volume]);
 
   const countReset = (why: string) => {
-    setResets((r) => {
-      logEvent("react-player", `PLAYBACK RESET #${r + 1}: ${why}`);
-      return r + 1;
-    });
+    resetSeq.current += 1;
+    logEvent("react-player", `PLAYBACK RESET #${resetSeq.current}: ${why}`);
+    setResets(resetSeq.current);
   };
 
   const onTimeUpdate = () => {

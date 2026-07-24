@@ -13,7 +13,7 @@ declare module "react" {
         src?: string;
         "video-title"?: string;
         volume?: number;
-        onPlayStateChange?: (e: Event) => void;
+        // No onPlayStateChange prop: camelCase event props are inert on custom elements in React 19. Listen via ref: el.addEventListener("play-state-change", ...). See FINDINGS.md §1–2.
       }>;
     }
   }
