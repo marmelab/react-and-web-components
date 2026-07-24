@@ -1,5 +1,6 @@
 import {
   Suspense,
+  lazy,
   type ComponentType,
   type LazyExoticComponent,
 } from "react";
@@ -13,8 +14,11 @@ type Route = {
 
 export const routes: Record<string, Route> = {
   "/": { title: "Home", Component: HomePage },
+  "/lifecycle": {
+    title: "1. Lifecycle",
+    Component: lazy(() => import("./experiments/lifecycle/LifecyclePage")),
+  },
   // Experiment tasks append entries here, e.g.:
-  // "/lifecycle": { title: "1. Lifecycle", Component: lazy(() => import("./experiments/lifecycle/LifecyclePage")) },
 };
 
 export function App() {
