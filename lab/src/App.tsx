@@ -6,6 +6,7 @@ import {
 } from "react";
 import { usePath, Link } from "./router";
 import { HomePage } from "./experiments/home/HomePage";
+import SsrPage from "./experiments/ssr/SsrPage";
 
 type Route = {
   title: string;
@@ -34,6 +35,7 @@ export const routes: Record<string, Route> = {
     title: "5. media-chrome",
     Component: lazy(() => import("./experiments/media-chrome/MediaChromePage")),
   },
+  "/ssr": { title: "7. SSR", Component: SsrPage },
   // Experiment tasks append entries here, e.g.:
 };
 
