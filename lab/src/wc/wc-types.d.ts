@@ -24,6 +24,7 @@ declare module "react" {
       }>;
       "inner-app": WC<{ greeting?: string }>;
       "reaction-card": WC<{ title?: string; count?: number; highlighted?: boolean }>;
+      "stateful-card": WC<{ label?: string }>;
       "media-controller": WC;
       "media-control-bar": WC;
       "media-play-button": WC;

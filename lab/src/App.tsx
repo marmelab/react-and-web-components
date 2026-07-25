@@ -36,6 +36,10 @@ export const routes: Record<string, Route> = {
     Component: lazy(() => import("./experiments/media-chrome/MediaChromePage")),
   },
   "/ssr": { title: "7. SSR", Component: SsrPage },
+  "/identity": {
+    title: "9. Identity",
+    Component: lazy(() => import("./experiments/identity/IdentityPage")),
+  },
 };
 
 export function App() {
