@@ -78,8 +78,10 @@ export default function LifecyclePage() {
         <ul>
           <li>Press each button once and read the event log after each.</li>
           <li>
-            "re-render, same props" should log nothing — React skips
-            unchanged props.
+            "re-render, same props" logs no attribute changes — but{" "}
+            <code>objectProp</code> STILL re-fires a PROPERTY line every time:
+            it's a fresh object literal each render and React compares
+            non-primitives by reference only (FINDINGS §1's biggest gotcha).
           </li>
           <li>
             "change objectProp" logs a PROPERTY line (accessor exists →

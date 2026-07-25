@@ -32,8 +32,10 @@ export default function MediaChromePage() {
           </li>
           <li>
             Note: this page's reset counter lives OUTSIDE the remounted
-            subtree, so a remount logs one artifact reset (see FINDINGS §5) —
-            the players on /stability count differently by design.
+            subtree, so a teardown while playback had elapsed can log an
+            artifact reset — it's state-dependent, not per-remount (see
+            FINDINGS §5); /stability's per-player counters count differently
+            by design.
           </li>
         </ul>
       </Explainer>

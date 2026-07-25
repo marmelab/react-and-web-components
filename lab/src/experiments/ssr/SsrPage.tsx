@@ -48,8 +48,8 @@ export default function SsrPage() {
           </li>
           <li>
             On 5199, <code>volume=0.5</code> got stuck as a dead attribute
-            (element upgraded after React's assignment) — snapshot the
-            outerHTML to see it.
+            (element upgraded after React's assignment) — use the snapshot
+            button below and look at the media-player tag's attributes.
           </li>
           <li>
             The Declarative Shadow DOM block: the stream genuinely creates a
@@ -66,11 +66,14 @@ export default function SsrPage() {
         <button
           onClick={() =>
             setProbeHtml(
-              document.querySelector("lifecycle-probe")?.outerHTML ?? "?",
+              [
+                document.querySelector("lifecycle-probe")?.outerHTML ?? "?",
+                document.querySelector("media-player")?.outerHTML ?? "?",
+              ].join("\n\n"),
             )
           }
         >
-          snapshot probe outerHTML
+          snapshot custom elements outerHTML
         </button>
       </p>
       {probeHtml && (
