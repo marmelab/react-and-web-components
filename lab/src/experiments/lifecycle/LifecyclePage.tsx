@@ -3,6 +3,7 @@ import "../../wc/lifecycle-probe";
 import { logEvent } from "../../instruments/log";
 import { LogPanel } from "../../instruments/LogPanel";
 import { RenderBadge } from "../../instruments/RenderBadge";
+import { Explainer } from "../../instruments/Explainer";
 
 export default function LifecyclePage() {
   const [mounted, setMounted] = useState(true);
@@ -68,6 +69,35 @@ export default function LifecyclePage() {
       <h2>
         1. Lifecycle — <RenderBadge name="page" />
       </h2>
+      <Explainer>
+        <p>
+          <strong>Tests:</strong> when custom-element callbacks fire while
+          React drives the element, and which channel React 19 uses (property
+          vs attribute vs event).
+        </p>
+        <ul>
+          <li>Press each button once and read the event log after each.</li>
+          <li>
+            "re-render, same props" should log nothing — React skips
+            unchanged props.
+          </li>
+          <li>
+            "change objectProp" logs a PROPERTY line (accessor exists →
+            property path); label/value log attributeChangedCallback
+            (attribute path).
+          </li>
+          <li>
+            "reorder within parent" moves the DOM node (disconnected+connected,
+            same instance); "move to other container" and "remount via key"
+            destroy it (new constructor).
+          </li>
+          <li>
+            Click the probe itself: only the ref+addEventListener and the
+            literal <code>"onprobe-event"</code> prop fire — camelCase{" "}
+            <code>onProbeEvent</code> is silently inert.
+          </li>
+        </ul>
+      </Explainer>
       <div
         style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}
       >

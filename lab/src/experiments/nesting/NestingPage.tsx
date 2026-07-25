@@ -3,6 +3,7 @@ import "../../wc/inner-app";
 import { OuterContext } from "../../wc/inner-app";
 import { logEvent } from "../../instruments/log";
 import { LogPanel } from "../../instruments/LogPanel";
+import { Explainer } from "../../instruments/Explainer";
 
 export default function NestingPage() {
   const [mounted, setMounted] = useState(true);
@@ -50,6 +51,31 @@ export default function NestingPage() {
   return (
     <main>
       <h2>3. Nesting: React → WC → React</h2>
+      <Explainer>
+        <p>
+          <strong>Tests:</strong> a web component that boots its own React
+          root inside its shadow DOM, used from an outer React app.
+        </p>
+        <ul>
+          <li>
+            The outer Provider sets a context value — the inner app still
+            shows "outer-default": context never crosses root boundaries.
+          </li>
+          <li>
+            Typing in the input re-renders the inner app through the
+            attribute bridge.
+          </li>
+          <li>
+            "emit composed event" reaches the page log; the non-composed one
+            stops at the shadow boundary.
+          </li>
+          <li>
+            "rapid remount ×20" exercises teardown: the element uses the
+            isConnected-check deferred unmount (see FINDINGS §3 for the race
+            it prevents).
+          </li>
+        </ul>
+      </Explainer>
       <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
         <button onClick={() => setMounted(!mounted)}>
           {mounted ? "unmount" : "mount"}

@@ -3,6 +3,7 @@ import "../../wc/stateful-card";
 import "../../wc/media-player";
 import { LogPanel } from "../../instruments/LogPanel";
 import { RenderBadge } from "../../instruments/RenderBadge";
+import { Explainer } from "../../instruments/Explainer";
 import { VIDEO_SRC } from "../../videoSrc";
 
 type Card = { id: number; label: string };
@@ -22,6 +23,30 @@ export default function IdentityPage() {
   return (
     <main>
       <h2>9. Identity & props-vs-state — <RenderBadge name="page" /></h2>
+      <Explainer>
+        <p>
+          <strong>Tests:</strong> where state actually lives when the same WC
+          appears many times — and whether React re-asserts props on an
+          active component.
+        </p>
+        <ul>
+          <li>
+            Click cards to build internal counters React knows nothing about,
+            THEN move things around.
+          </li>
+          <li>
+            Stable-key row: counters travel with their labels (React moves
+            the DOM nodes). Index-key row: labels move, counters stay put —
+            a silent state/props mismatch.
+          </li>
+          <li>
+            Part B: React re-applies the volume prop only when ITS value
+            changes — drag the player's internal slider, re-render with same
+            props, and nothing is re-asserted ("props are events, not
+            constraints").
+          </li>
+        </ul>
+      </Explainer>
       <p>
         1) Click cards to build INTERNAL state (click counters React knows nothing about).
         2) Move them around. Same data drives both rows — only the key strategy differs.

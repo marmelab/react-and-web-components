@@ -1,6 +1,7 @@
 import { Profiler, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import "../../wc/reaction-card";
+import { Explainer } from "../../instruments/Explainer";
 import { ReactionCard } from "./ReactionCard";
 
 type Mode = "react" | "wc";
@@ -81,6 +82,26 @@ export default function PerfPage() {
   return (
     <main>
       <h2>4. Performance side by side</h2>
+      <Explainer>
+        <p>
+          <strong>Tests:</strong> mount / update-storm / unmount cost of N
+          identical widgets — pure React vs web component wrapped in React.
+        </p>
+        <ul>
+          <li>
+            Pick a mode and N, then "run suite" TWICE (first run includes
+            warm-up) and compare rows.
+          </li>
+          <li>
+            Wall ms = flushSync duration (render+commit, no paint); Profiler
+            ms = React's actualDuration.
+          </li>
+          <li>
+            Run all four mode×N combinations for a fair picture; absolute
+            numbers are machine-specific (dev mode).
+          </li>
+        </ul>
+      </Explainer>
       <div
         style={{
           display: "flex",

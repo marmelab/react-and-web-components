@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { LogPanel } from "../../instruments/LogPanel";
+import { Explainer } from "../../instruments/Explainer";
 import { VIDEO_SRC } from "../../videoSrc";
 
 export default function SsrPage() {
@@ -28,6 +29,34 @@ export default function SsrPage() {
   return (
     <main>
       <h2>7. SSR</h2>
+      <Explainer>
+        <p>
+          <strong>Tests:</strong> what React 19's server renderer does with
+          custom elements. Serve this page two ways and compare:{" "}
+          <code>pnpm dev:ssr</code> → port 5199 (server-rendered + hydrated)
+          vs <code>pnpm dev</code> → port 5173 (pure SPA).
+        </p>
+        <ul>
+          <li>
+            The grey block shows whether THIS load was server-rendered and
+            what the server logged.
+          </li>
+          <li>
+            The custom elements below arrive as inert tags and upgrade only
+            after hydration, when their modules load client-side — watch the
+            event log for post-hydration constructors.
+          </li>
+          <li>
+            On 5199, <code>volume=0.5</code> got stuck as a dead attribute
+            (element upgraded after React's assignment) — snapshot the
+            outerHTML to see it.
+          </li>
+          <li>
+            The Declarative Shadow DOM block: the stream genuinely creates a
+            shadow root, but it does not survive hydration (FINDINGS §7).
+          </li>
+        </ul>
+      </Explainer>
       <pre style={{ background: "#f7f7f7", padding: 8 }}>{info.join("\n")}</pre>
 
       <h3>Custom elements rendered by the server</h3>

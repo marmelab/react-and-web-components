@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import "media-chrome";
 import { logEvent } from "../../instruments/log";
 import { LogPanel } from "../../instruments/LogPanel";
+import { Explainer } from "../../instruments/Explainer";
 import { VIDEO_SRC } from "../../videoSrc";
 import { StressHarness } from "../stability/StressHarness";
 
@@ -18,6 +19,24 @@ export default function MediaChromePage() {
   return (
     <main>
       <h2>5. Real-world validation: media-chrome</h2>
+      <Explainer>
+        <p>
+          <strong>Tests:</strong> whether the /stability findings hold for a
+          production web component player (media-chrome), under the identical
+          stress harness.
+        </p>
+        <ul>
+          <li>
+            Press play, then run the same knobs as /stability: re-render
+            crank, reparent, key remount.
+          </li>
+          <li>
+            Note: this page's reset counter lives OUTSIDE the remounted
+            subtree, so a remount logs one artifact reset (see FINDINGS §5) —
+            the players on /stability count differently by design.
+          </li>
+        </ul>
+      </Explainer>
       <p>
         Same harness as /stability. resets: <strong>{resets}</strong>
       </p>
