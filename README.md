@@ -24,6 +24,8 @@ hackday (2026-07-24); results live in [`FINDINGS.md`](./FINDINGS.md).
 
 ## Pointers
 
-- [`FINDINGS.md`](./FINDINGS.md) — results, plus how to run the pending
-  Firefox pass
+- [`SUMMARY.md`](./SUMMARY.md) — the short version: key findings + practical
+  rules
+- [`FINDINGS.md`](./FINDINGS.md) — full results and evidence, plus how to run
+  the pending Firefox pass
 - [`docs/superpowers/`](./docs/superpowers/) — spec + plan
