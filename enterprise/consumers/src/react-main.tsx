@@ -20,7 +20,7 @@ function App() {
         />
       </label>
       <media-player
-        src="https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_30MB.mp4"
+        src="https://samplelib.com/mp4/sample-20s.mp4"
         video-title="imported from corp-components, driven by React 19"
         volume={volume}
       />

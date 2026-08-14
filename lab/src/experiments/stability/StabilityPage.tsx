@@ -60,8 +60,8 @@ export default function StabilityPage() {
           <li>
             Crank the re-render slider to 20/s, type in the title prop, move
             the volume prop — reset counters should stay at 0 (React doesn't
-            touch an unchanged <code>&lt;video&gt;</code>) (the 10s clip
-            ending/looping during a long soak can bump the counters on its
+            touch an unchanged <code>&lt;video&gt;</code>) (the short demo clip
+            ending/restarting during a long soak can bump the counters on its
             own — that's the video, not React).
           </li>
           <li>
