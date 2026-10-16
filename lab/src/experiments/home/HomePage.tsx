@@ -27,8 +27,8 @@ export function HomePage() {
         experiment in Chrome AND Firefox.
       </p>
       <p>
-        React Compiler: wired in Task 10 — start with{" "}
-        <code>COMPILER=on pnpm dev</code> to enable it.
+        React Compiler: start with <code>COMPILER=on pnpm dev</code> to enable
+        it (the native compiler from <code>oxc-transform-react</code>).
       </p>
       <CompilerCheck />
     </main>

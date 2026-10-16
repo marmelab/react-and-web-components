@@ -31,10 +31,10 @@ export function StressHarness({
   const [keyN, setKeyN] = useState(0);
   const [domSide, setDomSide] = useState<Side | null>(null);
   const containersRef = useRef<HTMLDivElement>(null);
-  const docks = {
-    left: useRef<HTMLDivElement>(null),
-    right: useRef<HTMLDivElement>(null),
-  };
+  // Two plain refs, not an object of refs: the React Compiler reads
+  // `docks.left` in JSX as a ref access during render and skips the component.
+  const leftDock = useRef<HTMLDivElement>(null);
+  const rightDock = useRef<HTMLDivElement>(null);
   // Where the DOM-moved element sat in React's tree. It must go back there
   // before React reparents or remounts: React removes its old subtree from
   // where it rendered it, which would leave the moved element behind, still
@@ -61,7 +61,7 @@ export function StressHarness({
       ? containersRef.current?.querySelector(domMoveSelector)
       : null;
     const other: Side = side === "left" ? "right" : "left";
-    const dock = docks[other].current;
+    const dock = (other === "left" ? leftDock : rightDock).current;
     if (!el?.parentNode || !dock) return;
     home.current = { el, parent: el.parentNode, next: el.nextSibling };
     logEvent(
@@ -152,12 +152,12 @@ export function StressHarness({
           {side === "left" && content}
           {/* React renders no children here, so it never touches what the
               DOM move puts inside. */}
-          <div ref={docks.left} />
+          <div ref={leftDock} />
         </fieldset>
         <fieldset style={{ flex: 1, minHeight: 40 }}>
           <legend>right</legend>
           {side === "right" && content}
-          <div ref={docks.right} />
+          <div ref={rightDock} />
         </fieldset>
       </div>
     </div>

@@ -41,7 +41,10 @@ export default function NestingPage() {
     let flips = 0;
     rapidId.current = setInterval(() => {
       setMounted((m) => !m);
-      if (++flips >= 20) {
+      // `flips += 1`, not `++flips`: the native React Compiler can't compile
+      // an update expression yet and would skip the whole component.
+      flips += 1;
+      if (flips >= 20) {
         if (rapidId.current) clearInterval(rapidId.current);
         rapidId.current = null;
       }
