@@ -69,6 +69,14 @@ export default function StabilityPage() {
             restarts from 0 on both flavors. Watch each player's{" "}
             <code>resets</code> / dropped-frames line and the event log.
           </li>
+          <li>
+            "move WC via DOM" moves the same <code>&lt;media-player&gt;</code>{" "}
+            element to the other container with <code>appendChild</code>,
+            without React: it logs a disconnect/connect pair and keeps playing.
+            Only the WC gets this button: it is a single opaque node, while the
+            React player's DOM belongs to React. Reparent and remount move it
+            back first, so React doesn't leave it behind.
+          </li>
         </ul>
       </Explainer>
       <p>
@@ -76,6 +84,7 @@ export default function StabilityPage() {
         the log.
       </p>
       <StressHarness
+        domMoveSelector="media-player"
         render={(s) => (
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
             <WcMediaPlayer
