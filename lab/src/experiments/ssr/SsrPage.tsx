@@ -3,6 +3,13 @@ import { LogPanel } from "../../instruments/LogPanel";
 import { Explainer } from "../../instruments/Explainer";
 import { VIDEO_SRC } from "../../videoSrc";
 
+// Hoisted so its identity is stable across renders: React 19 compares the
+// dangerouslySetInnerHTML object by reference and rewrites innerHTML whenever
+// it changes, which replaces the stream-parsed shadow host (FINDINGS §7).
+const STABLE_DSD_HTML = {
+  __html: `<div><template shadowrootmode="open"><style>p{color:tomato;font-weight:bold}</style><p>DSD content (stable __html object) — tomato+bold ⇒ shadow root survived</p></template><p>light-DOM fallback (visible ⇒ NO shadow root)</p></div>`,
+};
+
 export default function SsrPage() {
   const [info, setInfo] = useState<string[]>([]);
   const [probeHtml, setProbeHtml] = useState("");
@@ -52,8 +59,12 @@ export default function SsrPage() {
             button below and look at the media-player tag's attributes.
           </li>
           <li>
-            The Declarative Shadow DOM block: the stream genuinely creates a
-            shadow root, but it does not survive hydration (FINDINGS §7).
+            The Declarative Shadow DOM blocks: the stream genuinely creates a
+            shadow root in both. The first passes an inline{" "}
+            <code>{"{{ __html }}"}</code> object, so the first re-render after
+            hydration rewrites its <code>innerHTML</code> and the shadow root
+            is gone. The second passes a module-level constant, so React skips
+            the rewrite and the shadow root survives (FINDINGS §7).
           </li>
         </ul>
       </Explainer>
@@ -86,6 +97,7 @@ export default function SsrPage() {
           __html: `<div><template shadowrootmode="open"><style>p{color:tomato;font-weight:bold}</style><p>DSD content — tomato+bold ⇒ shadow root was created</p></template><p>light-DOM fallback (visible ⇒ NO shadow root)</p></div>`,
         }}
       />
+      <div dangerouslySetInnerHTML={STABLE_DSD_HTML} />
       <LogPanel />
     </main>
   );
