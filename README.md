@@ -17,6 +17,9 @@ performance, React Compiler interaction and SSR. Built for a Marmelab hackday
 - `pnpm dev` → SPA lab at http://localhost:5173 (one route per experiment)
 - `COMPILER=on pnpm dev` → same, with the native React Compiler
   (`oxc-transform-react`); check the header badge
+- `pnpm --filter lab build && pnpm --filter lab preview` → production build
+  on http://localhost:4173, for benchmarking `/perf` (prefix the build with
+  `COMPILER=on` and/or `PROFILE=on`, the latter to keep the Profiler column)
 - `pnpm dev:ssr` → SSR server at http://localhost:5199 (experiment 7)
 - `pnpm --filter corp-components build && pnpm --filter consumers dev` →
   enterprise demo at http://localhost:5273 (the build step is required
