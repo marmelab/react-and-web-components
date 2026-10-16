@@ -11,13 +11,23 @@ type Result = {
   mode: Mode;
   n: number;
   wallMs: number;
-  profilerMs: number;
+  profilerMs: number | null;
 };
 
 const frame = () =>
   new Promise<void>((r) =>
     requestAnimationFrame(() => requestAnimationFrame(() => r())),
   );
+// Which React build this page runs on. Production builds never call
+// <Profiler onRender>, so its column reads "n/a" there; the profiling build
+// (PROFILE=on, react-dom/profiling) keeps it.
+const BUILD = import.meta.env.DEV
+  ? "dev"
+  : __PROFILING__
+    ? "prod-profiling"
+    : "prod";
+const COMPILER = __COMPILER_ON__ ? "compiler on" : "compiler off";
+
 const makeItems = (n: number): Item[] =>
   Array.from({ length: n }, (_, i) => ({
     id: i,
@@ -33,6 +43,7 @@ export default function PerfPage() {
   const [results, setResults] = useState<Result[]>([]);
   const [running, setRunning] = useState(false);
   const profilerMs = useRef(0);
+  const profilerFired = useRef(false);
 
   const measure = (
     scenario: string,
@@ -41,6 +52,7 @@ export default function PerfPage() {
     mutate: () => void,
   ) => {
     profilerMs.current = 0;
+    profilerFired.current = false;
     const t0 = performance.now();
     flushSync(mutate);
     const wallMs = performance.now() - t0;
@@ -52,7 +64,7 @@ export default function PerfPage() {
           mode: currentMode,
           n: currentN,
           wallMs,
-          profilerMs: profilerMs.current,
+          profilerMs: profilerFired.current ? profilerMs.current : null,
         },
       ]),
     );
@@ -72,6 +84,18 @@ export default function PerfPage() {
           highlighted: !it.highlighted,
         })),
       ),
+    );
+    await frame();
+    // Only item 0 changes: the other N-1 elements get identical props.
+    measure("update 1 of N", mode, n, () =>
+      setItems((prev) =>
+        prev.map((it, i) => (i === 0 ? { ...it, count: it.count + 1 } : it)),
+      ),
+    );
+    await frame();
+    // New array, same item objects: nothing to change anywhere.
+    measure("re-render, nothing changed", mode, n, () =>
+      setItems((prev) => [...prev]),
     );
     await frame();
     measure("unmount", mode, n, () => setItems([]));
@@ -97,8 +121,16 @@ export default function PerfPage() {
             ms = React's actualDuration.
           </li>
           <li>
-            Run all four mode×N combinations for a fair picture; absolute
-            numbers are machine-specific (dev mode).
+            "update 1 of N" and "re-render, nothing changed" leave most props
+            unchanged, which is where the React Compiler can skip work.
+          </li>
+          <li>
+            Running on: <strong>{BUILD}</strong>, {COMPILER}. Dev numbers
+            include React's development checks; for real costs run{" "}
+            <code>pnpm --filter lab build</code> then{" "}
+            <code>pnpm --filter lab preview</code> (add{" "}
+            <code>COMPILER=on</code> and/or <code>PROFILE=on</code> to the
+            build).
           </li>
         </ul>
       </Explainer>
@@ -148,7 +180,9 @@ export default function PerfPage() {
               <td>{r.mode}</td>
               <td>{r.n}</td>
               <td>{r.wallMs.toFixed(1)}</td>
-              <td>{r.profilerMs.toFixed(1)}</td>
+              <td>
+                {r.profilerMs === null ? "n/a" : r.profilerMs.toFixed(1)}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -156,6 +190,7 @@ export default function PerfPage() {
       <Profiler
         id="bench"
         onRender={(_id, _phase, actualDuration) => {
+          profilerFired.current = true;
           profilerMs.current += actualDuration;
         }}
       >
