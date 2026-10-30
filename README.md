@@ -20,6 +20,10 @@ performance, React Compiler interaction and SSR. Built for a Marmelab hackday
 - `pnpm --filter lab build && pnpm --filter lab preview` → production build
   on http://localhost:4173, for benchmarking `/perf` (prefix the build with
   `COMPILER=on` and/or `PROFILE=on`, the latter to keep the Profiler column)
+- `node lab/scripts/perf-bench.mjs --passes 3` → the whole `/perf` matrix
+  (production, profiling and dev builds, compiler off and on) in headless
+  Chrome and Firefox, printed as FINDINGS §4.1 tables. Playwright isn't a lab
+  dependency: point `PLAYWRIGHT` at its package if it isn't resolvable
 - `pnpm dev:ssr` → SSR server at http://localhost:5199 (experiment 7)
 - `pnpm --filter corp-components build && pnpm --filter consumers dev` →
   enterprise demo at http://localhost:5273 (the build step is required
