@@ -7,9 +7,10 @@ import { ReactPlayer } from "../../react-player/ReactPlayer";
 import { VIDEO_SRC } from "../../videoSrc";
 import { StressHarness } from "./StressHarness";
 
-// Task 3 finding (FINDINGS.md section 1): camelCase JSX event props like
-// `onPlayStateChange` are silently inert on custom elements — verified again
-// here (section 2): no `[page]` log line ever appeared despite real play/pause
+// Task 3 finding (FINDINGS.md section 1): React 19 strips `on` from a JSX
+// event prop and listens for the rest verbatim, so `onPlayStateChange` waits
+// for a "PlayStateChange" event that never comes — verified again here
+// (section 2): no `[page]` log line ever appeared despite real play/pause
 // transitions. Falling back to the documented pattern: ref + addEventListener.
 function WcMediaPlayer({
   src,

@@ -96,7 +96,8 @@ export default function LifecyclePage() {
           <li>
             Click the probe itself: only the ref+addEventListener and the
             literal <code>"onprobe-event"</code> prop fire — camelCase{" "}
-            <code>onProbeEvent</code> is silently inert.
+            <code>onProbeEvent</code> listens for a "ProbeEvent" event, which
+            never comes.
           </li>
         </ul>
       </Explainer>
