@@ -62,7 +62,7 @@ export default function SsrPage() {
             root, and since React 19.3 it survives hydration and later
             re-renders. React 19.2 rewrote the <code>innerHTML</code> of an
             inline <code>{"{{ __html }}"}</code> object on every re-render,
-            which destroyed it (FINDINGS §7).
+            which destroyed it.
           </li>
         </ul>
       </Explainer>

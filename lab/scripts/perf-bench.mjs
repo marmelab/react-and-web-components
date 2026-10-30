@@ -1,4 +1,4 @@
-// Scripted /perf benchmark (FINDINGS §4.1). Builds the four production
+// Scripted /perf benchmark. Builds the four production
 // variants (plain / compiler / profiling / profiling + compiler), serves each
 // with `vite preview`, starts the dev server with the compiler off and on, and
 // runs the suite in headless Chrome and Firefox: N = 1000, 2 warm-up runs, then
@@ -212,7 +212,7 @@ for (let p = 0; p < passes; p++) {
 fs.mkdirSync(OUT, { recursive: true });
 fs.writeFileSync(path.join(OUT, "results.json"), JSON.stringify(out, null, 2));
 
-// Markdown tables in the FINDINGS §4.1 shape: median of pass medians (spread).
+// Markdown tables: median of pass medians (spread).
 const cell = (cfg, browser, mode, scenario, key) => {
   const vals = out.passes
     .map((p) => p[cfg]?.[browser]?.[mode]?.result[scenario]?.[key])

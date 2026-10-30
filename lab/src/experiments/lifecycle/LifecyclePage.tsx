@@ -81,7 +81,7 @@ export default function LifecyclePage() {
             "re-render, same props" logs no attribute changes — but{" "}
             <code>objectProp</code> STILL re-fires a PROPERTY line every time:
             it's a fresh object literal each render and React compares
-            non-primitives by reference only (FINDINGS §1's biggest gotcha).
+            non-primitives by reference only.
           </li>
           <li>
             "change objectProp" logs a PROPERTY line (accessor exists →

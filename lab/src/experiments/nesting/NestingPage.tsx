@@ -74,8 +74,8 @@ export default function NestingPage() {
           </li>
           <li>
             "rapid remount ×20" exercises teardown: the element uses the
-            isConnected-check deferred unmount (see FINDINGS §3 for the race
-            it prevents).
+            isConnected-check deferred unmount, which keeps a fast reconnect
+            from creating a second root on the same shadow root.
           </li>
         </ul>
       </Explainer>
