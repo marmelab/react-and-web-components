@@ -4,6 +4,7 @@ import "../../wc/media-player";
 import { LogPanel } from "../../instruments/LogPanel";
 import { RenderBadge } from "../../instruments/RenderBadge";
 import { Explainer } from "../../instruments/Explainer";
+import { PageHeader } from "../../instruments/PageHeader";
 import { VIDEO_SRC } from "../../videoSrc";
 
 type Card = { id: number; label: string };
@@ -22,7 +23,12 @@ export default function IdentityPage() {
 
   return (
     <main>
-      <h2>9. Identity & props-vs-state — <RenderBadge name="page" /></h2>
+      <PageHeader
+        path="/identity"
+        lede="Identity and props vs state: where a web component's state lives, and what React re-asserts."
+      >
+        <RenderBadge name="page" />
+      </PageHeader>
       <Explainer>
         <p>
           <strong>Tests:</strong> where state actually lives when the same WC
@@ -47,17 +53,23 @@ export default function IdentityPage() {
           </li>
         </ul>
       </Explainer>
-      <p>
-        1) Click cards to build INTERNAL state (click counters React knows nothing about).
-        2) Move them around. Same data drives both rows — only the key strategy differs.
+      <p className="lab-hint">
+        <strong>1)</strong> Click cards to build INTERNAL state (click counters React knows nothing about).{" "}
+        <strong>2)</strong> Move them around. Same data drives both rows — only the key strategy differs.
       </p>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+      {/* Screen-recording scripts drive this page by its structure: keep the
+          buttons direct children of this row, and the row, the fieldsets,
+          the volume <label> and <media-player> direct children of <main>. */}
+      <div className="lab-panel lab-toolbar">
+        <span className="lab-toolbar-label">List</span>
         <button onClick={() => setCards([...cards].sort(() => Math.random() - 0.5))}>shuffle</button>
         <button onClick={() => setCards([...cards].reverse())}>reverse</button>
         <button onClick={insertFront}>insert at front</button>
         <button onClick={() => setCards(cards.filter((_, i) => i !== Math.floor(cards.length / 2)))}>remove middle</button>
         <button onClick={() => setCards(initialCards)}>reset list</button>
-        <button onClick={() => setTick(tick + 1)}>re-render parent, same props ({tick})</button>
+        <span className="lab-toolbar-sep" />
+        <span className="lab-toolbar-label">Parent</span>
+        <button onClick={() => setTick(tick + 1)}>re-render parent, same props <span className="lab-count">{tick}</span></button>
       </div>
       <fieldset>
         <legend>key = stable id — state should TRAVEL with the label</legend>
@@ -69,12 +81,12 @@ export default function IdentityPage() {
       </fieldset>
 
       <h3>Passing new props to an ACTIVE component</h3>
-      <p>
+      <p className="lab-hint">
         Steps: set the parent volume prop below → drag the player's INTERNAL volume slider to a different value →
         "re-render parent, same props" → does React re-assert its prop (watch for <code>PROPERTY volume =</code> in the log)?
         Then move the parent slider → who wins now?
       </p>
-      <label>
+      <label className="lab-field-card">
         parent volume prop:{" "}
         <input type="range" min={0} max={1} step={0.01} value={volume} onChange={(e) => setVolume(Number(e.target.value))} />{" "}
         ({volume})

@@ -10,8 +10,8 @@ export class ReactionCard extends HTMLElement {
       const shadow = this.attachShadow({ mode: "open" });
       shadow.innerHTML = `
         <style>
-          :host { display: inline-block; border: 1px solid #ccc; border-radius: 4px; padding: 2px 6px; font: 12px system-ui; }
-          :host(.hl) { background: #ffe9a8; }
+          :host { display: inline-block; border: 1px solid #e5e7eb; border-radius: 6px; padding: 2px 7px; font: 12px var(--lab-font-sans); }
+          :host(.hl) { background: #fef3c7; }
         </style>
         <span data-role="title"></span> <b data-role="count"></b>
       `;

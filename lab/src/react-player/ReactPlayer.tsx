@@ -48,28 +48,23 @@ export function ReactPlayer({
 
   const v = videoRef.current;
   return (
-    <div
-      style={{
-        border: "2px solid #a60",
-        borderRadius: 6,
-        padding: 8,
-        maxWidth: 480,
-      }}
-    >
-      <strong>{videoTitle}</strong> <RenderBadge name="ReactPlayer" />
+    <div className="lab-player">
+      <div className="lab-player-title">
+        <strong>{videoTitle}</strong> <RenderBadge name="ReactPlayer" />
+      </div>
       <video
         ref={videoRef}
         src={src}
-        style={{ width: "100%", background: "#000" }}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         onEmptied={() => { countReset("emptied (src reset)"); lastTime.current = 0; }}
         onTimeUpdate={onTimeUpdate}
       />
-      <div
-        style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 4 }}
-      >
-        <button onClick={() => { const vid = videoRef.current; if (!vid) return; playing ? vid.pause() : void vid.play(); }}>
+      <div className="lab-player-row">
+        <button
+          className="lab-player-toggle"
+          onClick={() => { const vid = videoRef.current; if (!vid) return; playing ? vid.pause() : void vid.play(); }}
+        >
           {playing ? "⏸" : "▶"}
         </button>
         <input
@@ -77,7 +72,6 @@ export function ReactPlayer({
           min={0}
           max={100}
           step={0.1}
-          style={{ flex: 1 }}
           value={v?.duration ? (time / v.duration) * 100 : 0}
           onChange={(e) => {
             const vid = videoRef.current;
@@ -85,7 +79,7 @@ export function ReactPlayer({
               vid.currentTime = (Number(e.target.value) / 100) * vid.duration;
           }}
         />
-        <span>{time.toFixed(1)}s</span>
+        <span className="lab-player-time">{time.toFixed(1)}s</span>
         <input
           type="range"
           min={0}
@@ -99,7 +93,7 @@ export function ReactPlayer({
           }}
         />
       </div>
-      <div style={{ font: "11px monospace", color: "#a00" }}>
+      <div className="lab-player-stats">
         resets: {resets} | dropped frames: {v?.getVideoPlaybackQuality ? v.getVideoPlaybackQuality().droppedVideoFrames : "n/a"}
       </div>
     </div>

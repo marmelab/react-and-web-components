@@ -23,10 +23,21 @@ export function navigate(path: string): void {
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
-export function Link({ to, children }: { to: string; children: ReactNode }) {
+export function Link({
+  to,
+  className,
+  children,
+}: {
+  to: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  const path = usePath();
   return (
     <a
       href={to}
+      className={className}
+      aria-current={path === to ? "page" : undefined}
       onClick={(e) => {
         e.preventDefault();
         navigate(to);

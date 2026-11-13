@@ -2,6 +2,7 @@ import { Profiler, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import "../../wc/reaction-card";
 import { Explainer } from "../../instruments/Explainer";
+import { PageHeader } from "../../instruments/PageHeader";
 import { ReactionCard } from "./ReactionCard";
 
 type Mode = "react" | "wc";
@@ -105,7 +106,10 @@ export default function PerfPage() {
 
   return (
     <main>
-      <h2>4. Performance side by side</h2>
+      <PageHeader
+        path="/perf"
+        lede="Performance side by side: N identical widgets, pure React against a web component wrapped in React."
+      />
       <Explainer>
         <p>
           <strong>Tests:</strong> mount / update-storm / unmount cost of N
@@ -134,59 +138,69 @@ export default function PerfPage() {
           </li>
         </ul>
       </Explainer>
-      <div
-        style={{
-          display: "flex",
-          gap: 8,
-          alignItems: "center",
-          marginBottom: 8,
-        }}
-      >
-        <select value={mode} onChange={(e) => setMode(e.target.value as Mode)}>
-          <option value="react">pure React</option>
-          <option value="wc">web component</option>
-        </select>
-        <select value={n} onChange={(e) => setN(Number(e.target.value))}>
-          <option value={100}>N = 100</option>
-          <option value={1000}>N = 1000</option>
-        </select>
-        <button onClick={runSuite} disabled={running}>
+      <div className="lab-panel lab-toolbar">
+        <label>
+          mode
+          <select
+            value={mode}
+            onChange={(e) => setMode(e.target.value as Mode)}
+          >
+            <option value="react">pure React</option>
+            <option value="wc">web component</option>
+          </select>
+        </label>
+        <label>
+          size
+          <select value={n} onChange={(e) => setN(Number(e.target.value))}>
+            <option value={100}>N = 100</option>
+            <option value={1000}>N = 1000</option>
+          </select>
+        </label>
+        <button className="lab-primary" onClick={runSuite} disabled={running}>
           run suite
         </button>
         <button onClick={() => setResults([])}>clear results</button>
+        <span className="lab-spacer" />
+        <span className="lab-fps">
+          {BUILD} · {COMPILER}
+        </span>
       </div>
-      <table
-        border={1}
-        cellPadding={4}
-        style={{
-          borderCollapse: "collapse",
-          fontFamily: "monospace",
-          fontSize: 12,
-        }}
-      >
-        <thead>
-          <tr>
-            <th>scenario</th>
-            <th>mode</th>
-            <th>N</th>
-            <th>flushSync wall ms</th>
-            <th>Profiler actualDuration ms</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((r, i) => (
-            <tr key={i}>
-              <td>{r.scenario}</td>
-              <td>{r.mode}</td>
-              <td>{r.n}</td>
-              <td>{r.wallMs.toFixed(1)}</td>
-              <td>
-                {r.profilerMs === null ? "n/a" : r.profilerMs.toFixed(1)}
-              </td>
+      {/* The bench driver (scripts/perf-bench.mjs) reads this table: one
+          <tr> per result in <tbody>, the five cells as plain text. */}
+      {results.length > 0 ? (
+        <table className="lab-table">
+          <thead>
+            <tr>
+              <th>scenario</th>
+              <th>mode</th>
+              <th className="num">N</th>
+              <th className="num">flushSync wall ms</th>
+              <th className="num">Profiler actualDuration ms</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {results.map((r, i) => (
+              <tr key={i}>
+                <td>{r.scenario}</td>
+                <td>
+                  <span className="lab-mode" data-mode={r.mode}>
+                    {r.mode}
+                  </span>
+                </td>
+                <td className="num">{r.n}</td>
+                <td className="num">{r.wallMs.toFixed(1)}</td>
+                <td className="num">
+                  {r.profilerMs === null ? "n/a" : r.profilerMs.toFixed(1)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="lab-empty">
+          No results yet. Pick a mode and N, then run the suite twice.
+        </div>
+      )}
       <Profiler
         id="bench"
         onRender={(_id, _phase, actualDuration) => {
@@ -194,9 +208,7 @@ export default function PerfPage() {
           profilerMs.current += actualDuration;
         }}
       >
-        <div
-          style={{ marginTop: 12, display: "flex", flexWrap: "wrap", gap: 4 }}
-        >
+        <div className="lab-stage lab-stage-grid">
           {items.map((it) =>
             mode === "react" ? (
               <ReactionCard

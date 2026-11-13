@@ -5,87 +5,58 @@ import {
   type LazyExoticComponent,
 } from "react";
 import { usePath, Link } from "./router";
+import { experiments } from "./experiments";
 import { HomePage } from "./experiments/home/HomePage";
 import SsrPage from "./experiments/ssr/SsrPage";
 
-type Route = {
-  title: string;
-  Component: ComponentType | LazyExoticComponent<ComponentType>;
-};
+type Page = ComponentType | LazyExoticComponent<ComponentType>;
 
-export const routes: Record<string, Route> = {
-  "/": { title: "Home", Component: HomePage },
-  "/lifecycle": {
-    title: "1. Lifecycle",
-    Component: lazy(() => import("./experiments/lifecycle/LifecyclePage")),
-  },
-  "/stability": {
-    title: "2. Stability",
-    Component: lazy(() => import("./experiments/stability/StabilityPage")),
-  },
-  "/nesting": {
-    title: "3. Nesting",
-    Component: lazy(() => import("./experiments/nesting/NestingPage")),
-  },
-  "/perf": {
-    title: "4. Perf",
-    Component: lazy(() => import("./experiments/perf/PerfPage")),
-  },
-  "/media-chrome": {
-    title: "5. media-chrome",
-    Component: lazy(() => import("./experiments/media-chrome/MediaChromePage")),
-  },
-  "/ssr": { title: "7. SSR", Component: SsrPage },
-  "/identity": {
-    title: "9. Identity",
-    Component: lazy(() => import("./experiments/identity/IdentityPage")),
-  },
+export const routes: Record<string, Page> = {
+  "/": HomePage,
+  "/lifecycle": lazy(() => import("./experiments/lifecycle/LifecyclePage")),
+  "/stability": lazy(() => import("./experiments/stability/StabilityPage")),
+  "/nesting": lazy(() => import("./experiments/nesting/NestingPage")),
+  "/perf": lazy(() => import("./experiments/perf/PerfPage")),
+  "/media-chrome": lazy(
+    () => import("./experiments/media-chrome/MediaChromePage"),
+  ),
+  "/ssr": SsrPage,
+  "/identity": lazy(() => import("./experiments/identity/IdentityPage")),
 };
 
 export function App() {
   const path = usePath();
-  const route = routes[path] ?? routes["/"];
-  const { Component } = route;
+  const Component = routes[path] ?? routes["/"];
   return (
-    <div
-      style={{
-        fontFamily: "system-ui, sans-serif",
-        margin: "0 auto",
-        maxWidth: 1100,
-        padding: 16,
-      }}
-    >
-      <header
-        style={{
-          display: "flex",
-          gap: 12,
-          alignItems: "baseline",
-          borderBottom: "1px solid #ddd",
-          marginBottom: 16,
-        }}
-      >
-        <h1 style={{ fontSize: 18 }}>React 19 × Web Components Lab</h1>
-        <span
-          style={{
-            fontSize: 12,
-            padding: "2px 8px",
-            borderRadius: 10,
-            background: __COMPILER_ON__ ? "#cfc" : "#eee",
-          }}
-        >
-          React Compiler: {__COMPILER_ON__ ? "ON" : "OFF"}
-        </span>
-        <nav style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {Object.entries(routes).map(([p, r]) => (
-            <Link key={p} to={p}>
-              {r.title}
-            </Link>
-          ))}
-        </nav>
+    <div className="lab">
+      <header className="lab-header">
+        <div className="lab-header-inner">
+          <Link to="/" className="lab-brand">
+            <span className="lab-logo" aria-hidden="true">
+              wc
+            </span>
+            React 19 × Web Components
+            <span className="lab-tag">LAB</span>
+          </Link>
+          <nav className="lab-nav">
+            <Link to="/">Home</Link>
+            {experiments.map((e) => (
+              <Link key={e.path} to={e.path}>
+                <span className="lab-nav-n">{e.n}</span>
+                {e.title}
+              </Link>
+            ))}
+          </nav>
+          <span className="lab-compiler" data-on={__COMPILER_ON__}>
+            React Compiler {__COMPILER_ON__ ? "on" : "off"}
+          </span>
+        </div>
       </header>
-      <Suspense fallback={<p>loading experiment…</p>}>
-        <Component />
-      </Suspense>
+      <div className="lab-page">
+        <Suspense fallback={<p className="lab-loading">loading experiment…</p>}>
+          <Component />
+        </Suspense>
+      </div>
     </div>
   );
 }

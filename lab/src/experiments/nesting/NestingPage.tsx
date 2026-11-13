@@ -4,6 +4,7 @@ import { OuterContext } from "../../wc/inner-app";
 import { logEvent } from "../../instruments/log";
 import { LogPanel } from "../../instruments/LogPanel";
 import { Explainer } from "../../instruments/Explainer";
+import { PageHeader } from "../../instruments/PageHeader";
 
 export default function NestingPage() {
   const [mounted, setMounted] = useState(true);
@@ -53,7 +54,10 @@ export default function NestingPage() {
 
   return (
     <main>
-      <h2>3. Nesting: React → WC → React</h2>
+      <PageHeader
+        path="/nesting"
+        lede="React → web component → React: an inner React root inside a custom element's shadow DOM."
+      />
       <Explainer>
         <p>
           <strong>Tests:</strong> a web component that boots its own React
@@ -79,21 +83,35 @@ export default function NestingPage() {
           </li>
         </ul>
       </Explainer>
-      <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
-        <button onClick={() => setMounted(!mounted)}>
-          {mounted ? "unmount" : "mount"}
-        </button>
-        <button onClick={rapidRemount}>rapid remount ×20</button>
-        <input
-          value={greeting}
-          onChange={(e) => setGreeting(e.target.value)}
-          style={{ width: 260 }}
-        />
+      <div className="lab-panel">
+        <div className="lab-toolbar">
+          <span className="lab-toolbar-label">Tree</span>
+          <button onClick={() => setMounted(!mounted)}>
+            {mounted ? "unmount" : "mount"}
+          </button>
+          <button onClick={rapidRemount}>rapid remount ×20</button>
+        </div>
+        <div className="lab-toolbar">
+          <span className="lab-toolbar-label">Props</span>
+          <label>
+            greeting
+            <input
+              value={greeting}
+              onChange={(e) => setGreeting(e.target.value)}
+              size={30}
+            />
+          </label>
+        </div>
       </div>
-      <OuterContext.Provider value="OUTER PROVIDER VALUE">
-        {mounted && <inner-app ref={ref} greeting={greeting} />}
-      </OuterContext.Provider>
-      <p>
+      <fieldset>
+        <legend>
+          {"<OuterContext.Provider value=\"OUTER PROVIDER VALUE\">"}
+        </legend>
+        <OuterContext.Provider value="OUTER PROVIDER VALUE">
+          {mounted && <inner-app ref={ref} greeting={greeting} />}
+        </OuterContext.Provider>
+      </fieldset>
+      <p className="lab-hint">
         If the inner app shows "outer-default", context did NOT cross the root
         boundary (expected).
       </p>

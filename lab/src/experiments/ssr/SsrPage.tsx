@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { LogPanel } from "../../instruments/LogPanel";
 import { Explainer } from "../../instruments/Explainer";
+import { PageHeader } from "../../instruments/PageHeader";
 import { VIDEO_SRC } from "../../videoSrc";
 
 // Client-only: these modules extend HTMLElement, which Node doesn't have.
@@ -34,7 +35,10 @@ export default function SsrPage() {
 
   return (
     <main>
-      <h2>7. SSR</h2>
+      <PageHeader
+        path="/ssr"
+        lede="What React 19's server renderer sends for custom elements, and what survives hydration."
+      />
       <Explainer>
         <p>
           <strong>Tests:</strong> what React 19's server renderer does with
@@ -66,11 +70,13 @@ export default function SsrPage() {
           </li>
         </ul>
       </Explainer>
-      <pre style={{ background: "#f7f7f7", padding: 8 }}>{info.join("\n")}</pre>
+      <pre className="lab-pre">{info.join("\n")}</pre>
 
       <h3>Custom elements rendered by the server</h3>
-      <lifecycle-probe label="ssr" value="42" objectProp={{ ssr: true }} />
-      <media-player src={VIDEO_SRC} video-title="SSR player" volume={0.5} />
+      <div className="lab-stack">
+        <lifecycle-probe label="ssr" value="42" objectProp={{ ssr: true }} />
+        <media-player src={VIDEO_SRC} video-title="SSR player" volume={0.5} />
+      </div>
       <p>
         <button
           onClick={() =>
@@ -86,15 +92,18 @@ export default function SsrPage() {
         </button>
       </p>
       {probeHtml && (
-        <pre style={{ background: "#f7f7f7", padding: 8 }}>{probeHtml}</pre>
+        <pre className="lab-pre">{probeHtml}</pre>
       )}
 
       <h3>Declarative Shadow DOM</h3>
-      <div
-        dangerouslySetInnerHTML={{
-          __html: `<div><template shadowrootmode="open"><style>p{color:tomato;font-weight:bold}</style><p>DSD content — tomato+bold ⇒ shadow root was created</p></template><p>light-DOM fallback (visible ⇒ NO shadow root)</p></div>`,
-        }}
-      />
+      <fieldset>
+        <legend>declarative shadow root</legend>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: `<div><template shadowrootmode="open"><style>p{color:tomato;font-weight:bold}</style><p>DSD content — tomato+bold ⇒ shadow root was created</p></template><p>light-DOM fallback (visible ⇒ NO shadow root)</p></div>`,
+          }}
+        />
+      </fieldset>
       <LogPanel />
     </main>
   );

@@ -3,6 +3,7 @@ import "../../wc/media-player";
 import { logEvent } from "../../instruments/log";
 import { LogPanel } from "../../instruments/LogPanel";
 import { Explainer } from "../../instruments/Explainer";
+import { PageHeader } from "../../instruments/PageHeader";
 import { ReactPlayer } from "../../react-player/ReactPlayer";
 import { VIDEO_SRC } from "../../videoSrc";
 import { StressHarness } from "./StressHarness";
@@ -48,7 +49,10 @@ function WcMediaPlayer({
 export default function StabilityPage() {
   return (
     <main>
-      <h2>2. Stability — media player under parent re-renders</h2>
+      <PageHeader
+        path="/stability"
+        lede="A media player under an aggressive React parent: the web component and its pure-React twin, side by side."
+      />
       <Explainer>
         <p>
           <strong>Tests:</strong> does video playback survive an aggressive
@@ -79,14 +83,14 @@ export default function StabilityPage() {
           </li>
         </ul>
       </Explainer>
-      <p>
-        Start BOTH players, then abuse the knobs. Watch the reset counters and
-        the log.
+      <p className="lab-hint">
+        <strong>Start both players</strong>, then abuse the knobs. Watch the
+        reset counters and the log.
       </p>
       <StressHarness
         domMoveSelector="media-player"
         render={(s) => (
-          <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+          <div className="lab-players">
             <WcMediaPlayer
               src={VIDEO_SRC}
               videoTitle={`WC — ${s.title}`}

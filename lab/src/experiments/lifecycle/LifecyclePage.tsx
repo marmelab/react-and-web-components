@@ -4,6 +4,7 @@ import { logEvent } from "../../instruments/log";
 import { LogPanel } from "../../instruments/LogPanel";
 import { RenderBadge } from "../../instruments/RenderBadge";
 import { Explainer } from "../../instruments/Explainer";
+import { PageHeader } from "../../instruments/PageHeader";
 
 export default function LifecyclePage() {
   const [mounted, setMounted] = useState(true);
@@ -44,8 +45,8 @@ export default function LifecyclePage() {
   ) : null;
 
   const tree = (
-    <div style={{ display: "flex", gap: 16 }}>
-      <fieldset style={{ flex: 1 }}>
+    <div className="lab-split">
+      <fieldset>
         <legend>
           left{" "}
           {order === "probe-first"
@@ -54,10 +55,20 @@ export default function LifecyclePage() {
         </legend>
         {container === "left" &&
           (order === "probe-first"
-            ? [<div key="p">{probe}</div>, <p key="s">sibling</p>]
-            : [<p key="s">sibling</p>, <div key="p">{probe}</div>])}
+            ? [
+                <div key="p">{probe}</div>,
+                <p key="s" className="lab-sibling">
+                  sibling
+                </p>,
+              ]
+            : [
+                <p key="s" className="lab-sibling">
+                  sibling
+                </p>,
+                <div key="p">{probe}</div>,
+              ])}
       </fieldset>
-      <fieldset style={{ flex: 1 }}>
+      <fieldset>
         <legend>right</legend>
         {container === "right" && probe}
       </fieldset>
@@ -66,9 +77,12 @@ export default function LifecyclePage() {
 
   return (
     <main>
-      <h2>
-        1. Lifecycle — <RenderBadge name="page" />
-      </h2>
+      <PageHeader
+        path="/lifecycle"
+        lede="Callbacks and channels: what React 19 does to a custom element it drives."
+      >
+        <RenderBadge name="page" />
+      </PageHeader>
       <Explainer>
         <p>
           <strong>Tests:</strong> when custom-element callbacks fire while
@@ -101,47 +115,55 @@ export default function LifecyclePage() {
           </li>
         </ul>
       </Explainer>
-      <div
-        style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}
-      >
-        <button onClick={() => setTick(tick + 1)}>
-          re-render parent, same props ({tick})
-        </button>
-        <button onClick={() => setLabel(label === "A" ? "B" : "A")}>
-          change label attribute ({label})
-        </button>
-        <button onClick={() => setValue(value + 1)}>
-          change value attribute ({value})
-        </button>
-        <button onClick={() => setObjTick(objTick + 1)}>
-          change objectProp (object) ({objTick})
-        </button>
-        <button onClick={() => setKeyN(keyN + 1)}>
-          remount via key ({keyN})
-        </button>
-        <button onClick={() => setMounted(!mounted)}>
-          {mounted ? "unmount" : "mount"}
-        </button>
-        <button
-          onClick={() =>
-            setOrder(order === "probe-first" ? "probe-last" : "probe-first")
-          }
-        >
-          reorder within parent (keyed)
-        </button>
-        <button
-          onClick={() => setContainer(container === "left" ? "right" : "left")}
-        >
-          move to other container
-        </button>
-        <label>
-          <input
-            type="checkbox"
-            checked={strict}
-            onChange={(e) => setStrict(e.target.checked)}
-          />{" "}
-          StrictMode subtree
-        </label>
+      <div className="lab-panel">
+        <div className="lab-toolbar">
+          <span className="lab-toolbar-label">Props</span>
+          <button onClick={() => setTick(tick + 1)}>
+            re-render parent, same props{" "}
+            <span className="lab-count">{tick}</span>
+          </button>
+          <button onClick={() => setLabel(label === "A" ? "B" : "A")}>
+            change label attribute <span className="lab-count">{label}</span>
+          </button>
+          <button onClick={() => setValue(value + 1)}>
+            change value attribute <span className="lab-count">{value}</span>
+          </button>
+          <button onClick={() => setObjTick(objTick + 1)}>
+            change objectProp (object){" "}
+            <span className="lab-count">{objTick}</span>
+          </button>
+        </div>
+        <div className="lab-toolbar">
+          <span className="lab-toolbar-label">Tree</span>
+          <button onClick={() => setKeyN(keyN + 1)}>
+            remount via key <span className="lab-count">{keyN}</span>
+          </button>
+          <button onClick={() => setMounted(!mounted)}>
+            {mounted ? "unmount" : "mount"}
+          </button>
+          <button
+            onClick={() =>
+              setOrder(order === "probe-first" ? "probe-last" : "probe-first")
+            }
+          >
+            reorder within parent (keyed)
+          </button>
+          <button
+            onClick={() =>
+              setContainer(container === "left" ? "right" : "left")
+            }
+          >
+            move to other container
+          </button>
+          <label>
+            <input
+              type="checkbox"
+              checked={strict}
+              onChange={(e) => setStrict(e.target.checked)}
+            />
+            StrictMode subtree
+          </label>
+        </div>
       </div>
       {strict ? <StrictMode>{tree}</StrictMode> : tree}
       <LogPanel />

@@ -15,8 +15,6 @@ export class LifecycleProbe extends HTMLElement {
       "probe",
       `connectedCallback (label=${this.getAttribute("label")})`,
     );
-    this.style.cssText =
-      "display:inline-block;border:2px solid #0a6;border-radius:4px;padding:4px 8px;cursor:pointer;";
     this.render();
     this.addEventListener("click", this.#onClick);
   }

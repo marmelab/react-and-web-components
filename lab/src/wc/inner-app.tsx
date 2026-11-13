@@ -12,23 +12,65 @@ function InnerApp({ greeting }: { greeting: string }) {
       new CustomEvent(type, { bubbles: true, composed, detail: { count } }),
     );
   return (
-    <div style={{ border: "2px dashed #939", borderRadius: 6, padding: 8 }}>
-      <p>
-        inner React app — greeting attr: "{greeting}" — OuterContext seen:{" "}
-        <strong>"{ctx}"</strong>
-      </p>
-      <button onClick={() => setCount((c) => c + 1)}>
-        inner count: {count}
-      </button>{" "}
-      <button onClick={(e) => emit(e, "inner-event", true)}>
-        emit composed event
-      </button>{" "}
-      <button onClick={(e) => emit(e, "inner-event-scoped", false)}>
-        emit non-composed event
-      </button>
-    </div>
+    <>
+      {/* The outer page's stylesheet stops at this shadow root, so the inner
+          app brings its own; only the inherited --lab-* tokens get in. */}
+      <style>{INNER_CSS}</style>
+      <div className="inner">
+        <div className="tag">inner React root · in the shadow DOM</div>
+        <p>
+          greeting attr: <code>"{greeting}"</code> · OuterContext seen:{" "}
+          <code>"{ctx}"</code>
+        </p>
+        <div className="row">
+          <button onClick={() => setCount((c) => c + 1)}>
+            inner count: {count}
+          </button>
+          <button onClick={(e) => emit(e, "inner-event", true)}>
+            emit composed event
+          </button>
+          <button onClick={(e) => emit(e, "inner-event-scoped", false)}>
+            emit non-composed event
+          </button>
+        </div>
+      </div>
+    </>
   );
 }
+
+const INNER_CSS = `
+  .inner {
+    padding: 12px 16px 14px;
+    background: var(--lab-react-soft, #fff7ed);
+    border: 1.5px dashed var(--lab-react, #ea580c);
+    border-radius: 12px;
+  }
+  .tag {
+    font: 600 10px var(--lab-font-mono, monospace);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lab-react-ink, #9a3412);
+  }
+  p { margin: 6px 0 12px; }
+  code {
+    font: 500 12.5px var(--lab-font-mono, monospace);
+    padding: 1px 6px;
+    background: #fff;
+    border: 1px solid var(--lab-border, #e5e7eb);
+    border-radius: 4px;
+  }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; }
+  button {
+    padding: 6px 11px;
+    font: 500 13px var(--lab-font-sans, sans-serif);
+    color: var(--lab-text, #111827);
+    background: #fff;
+    border: 1px solid #fdba74;
+    border-radius: 7px;
+    cursor: pointer;
+  }
+  button:hover { background: #ffedd5; }
+`;
 
 class InnerAppElement extends HTMLElement {
   static observedAttributes = ["greeting"];

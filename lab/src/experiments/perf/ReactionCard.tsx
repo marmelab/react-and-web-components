@@ -1,3 +1,5 @@
+// Twin of <reaction-card> (src/wc/reaction-card.ts): same look, same number
+// of style declarations, so neither side of the benchmark pays for more CSS.
 export function ReactionCard({
   title,
   count,
@@ -11,11 +13,11 @@ export function ReactionCard({
     <span
       style={{
         display: "inline-block",
-        border: "1px solid #ccc",
-        borderRadius: 4,
-        padding: "2px 6px",
-        font: "12px system-ui",
-        background: highlighted ? "#ffe9a8" : undefined,
+        border: "1px solid #e5e7eb",
+        borderRadius: 6,
+        padding: "2px 7px",
+        font: "12px var(--lab-font-sans)",
+        background: highlighted ? "#fef3c7" : undefined,
       }}
     >
       {title} <b>{count}</b>

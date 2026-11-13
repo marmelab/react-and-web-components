@@ -85,76 +85,82 @@ export function StressHarness({
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          gap: 12,
-          flexWrap: "wrap",
-          alignItems: "center",
-          marginBottom: 8,
-        }}
-      >
-        <label>
-          re-render:{" "}
-          <input
-            type="range"
-            min={0}
-            max={20}
-            value={hz}
-            onChange={(e) => setHz(Number(e.target.value))}
-          />{" "}
-          {hz}/s (tick {tick})
-        </label>
-        <button onClick={() => setUnrelated(unrelated + 1)}>
-          unrelated state ({unrelated})
-        </button>
-        <label>
-          title prop:{" "}
-          <input value={title} onChange={(e) => setTitle(e.target.value)} />
-        </label>
-        <label>
-          volume prop:{" "}
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.01}
-            value={volume}
-            onChange={(e) => setVolume(Number(e.target.value))}
-          />
-        </label>
-        <button
-          onClick={() => {
-            moveHome("undone before React reparent");
-            setSide(side === "left" ? "right" : "left");
-          }}
-        >
-          reparent (in {side})
-        </button>
-        {domMoveSelector && (
-          <button onClick={domMove}>
-            move WC via DOM (in {domSide ?? side})
+      <div className="lab-panel">
+        <div className="lab-toolbar">
+          <span className="lab-toolbar-label">Pressure</span>
+          <label>
+            re-render
+            <input
+              type="range"
+              min={0}
+              max={20}
+              value={hz}
+              onChange={(e) => setHz(Number(e.target.value))}
+            />
+            <span className="lab-mono">{hz}/s</span>
+            <span className="lab-faint">(tick {tick})</span>
+          </label>
+          <button onClick={() => setUnrelated(unrelated + 1)}>
+            unrelated state <span className="lab-count">{unrelated}</span>
           </button>
-        )}
-        <button
-          onClick={() => {
-            moveHome("undone before React remount");
-            setKeyN(keyN + 1);
-          }}
-        >
-          remount via key ({keyN})
-        </button>
-        <RenderBadge name="harness" /> <FpsMeter />
+          <span className="lab-spacer" />
+          <RenderBadge name="harness" />
+          <FpsMeter />
+        </div>
+        <div className="lab-toolbar">
+          <span className="lab-toolbar-label">Props</span>
+          <label>
+            title
+            <input value={title} onChange={(e) => setTitle(e.target.value)} />
+          </label>
+          <label>
+            volume
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={volume}
+              onChange={(e) => setVolume(Number(e.target.value))}
+            />
+            <span className="lab-mono">{volume.toFixed(2)}</span>
+          </label>
+        </div>
+        <div className="lab-toolbar">
+          <span className="lab-toolbar-label">Tree</span>
+          <button
+            onClick={() => {
+              moveHome("undone before React reparent");
+              setSide(side === "left" ? "right" : "left");
+            }}
+          >
+            reparent <span className="lab-count">in {side}</span>
+          </button>
+          {domMoveSelector && (
+            <button onClick={domMove}>
+              move WC via DOM{" "}
+              <span className="lab-count">in {domSide ?? side}</span>
+            </button>
+          )}
+          <button
+            onClick={() => {
+              moveHome("undone before React remount");
+              setKeyN(keyN + 1);
+            }}
+          >
+            remount via key <span className="lab-count">{keyN}</span>
+          </button>
+        </div>
       </div>
-      <div ref={containersRef} style={{ display: "flex", gap: 16 }}>
-        <fieldset style={{ flex: 1, minHeight: 40 }}>
+      <div ref={containersRef} className="lab-rows">
+        <fieldset>
           <legend>left</legend>
           {side === "left" && content}
           {/* React renders no children here, so it never touches what the
               DOM move puts inside. */}
           <div ref={leftDock} />
         </fieldset>
-        <fieldset style={{ flex: 1, minHeight: 40 }}>
+        <fieldset>
           <legend>right</legend>
           {side === "right" && content}
           <div ref={rightDock} />

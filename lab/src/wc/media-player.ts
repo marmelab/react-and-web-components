@@ -19,11 +19,33 @@ export class MediaPlayer extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
     shadow.innerHTML = `
       <style>
-        :host { display: block; border: 2px solid #06a; border-radius: 6px; padding: 8px; max-width: 480px; }
-        video { width: 100%; background: #000; }
-        .row { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
-        input[type=range] { flex: 1; }
-        .stats { font: 11px monospace; color: #a00; }
+        /* The page's styles stop at this shadow root; only the inherited
+           --lab-* tokens get in, hence the fallbacks. */
+        :host {
+          display: block; max-width: 480px; padding: 10px;
+          background: var(--lab-surface, #fff);
+          border: 1.5px solid var(--lab-wc, #2563eb); border-radius: 12px;
+          box-shadow: 0 1px 3px rgb(16 24 40 / 0.07), 0 1px 2px rgb(16 24 40 / 0.04);
+        }
+        [data-role=title] { display: block; margin: 0 2px 8px; font-size: 13px; line-height: 1.7; }
+        [data-role=title]::before {
+          content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px;
+          border-radius: 50%; background: var(--lab-wc, #2563eb);
+        }
+        video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; }
+        .row { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+        button {
+          flex: none; display: grid; place-items: center; width: 30px; height: 30px; padding: 0;
+          font-size: 11px; color: #fff; background: var(--lab-wc, #2563eb);
+          border: 0; border-radius: 50%; cursor: pointer;
+        }
+        input[type=range] { flex: 1; min-width: 0; margin: 0; accent-color: var(--lab-wc, #2563eb); }
+        input[data-role=volume] { flex: 0 0 72px; }
+        [data-role=time] {
+          min-width: 42px; text-align: right; font: 500 12px var(--lab-font-mono, monospace);
+          color: var(--lab-muted, #6b7280); font-variant-numeric: tabular-nums;
+        }
+        .stats { margin-top: 6px; font: 11px var(--lab-font-mono, monospace); color: var(--lab-muted, #6b7280); }
       </style>
       <strong data-role="title"></strong>
       <video></video>

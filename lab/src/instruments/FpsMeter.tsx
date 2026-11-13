@@ -17,6 +17,8 @@ export function FpsMeter() {
     return () => cancelAnimationFrame(raf);
   }, []);
   return (
-    <span style={{ fontFamily: "monospace", fontSize: 12 }}>fps: {fps}</span>
+    <span className="lab-fps">
+      fps <b>{fps}</b>
+    </span>
   );
 }

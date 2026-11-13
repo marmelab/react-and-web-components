@@ -7,16 +7,8 @@ export function RenderBadge({ name }: { name: string }) {
   // memoize the element so count freezes when `name` is unchanged — that is itself a finding.
   count.current += 1;
   return (
-    <span
-      style={{
-        background: "#eef",
-        borderRadius: 3,
-        padding: "1px 6px",
-        fontSize: 12,
-        fontFamily: "monospace",
-      }}
-    >
-      {name} renders: {count.current}
+    <span className="lab-badge">
+      {name} renders: <b>{count.current}</b>
     </span>
   );
 }

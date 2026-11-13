@@ -3,6 +3,7 @@ import "media-chrome";
 import { logEvent } from "../../instruments/log";
 import { LogPanel } from "../../instruments/LogPanel";
 import { Explainer } from "../../instruments/Explainer";
+import { PageHeader } from "../../instruments/PageHeader";
 import { VIDEO_SRC } from "../../videoSrc";
 import { StressHarness } from "../stability/StressHarness";
 
@@ -18,7 +19,10 @@ export default function MediaChromePage() {
 
   return (
     <main>
-      <h2>5. Real-world validation: media-chrome</h2>
+      <PageHeader
+        path="/media-chrome"
+        lede="Real-world validation: a production web-component player under the same stress harness."
+      />
       <Explainer>
         <p>
           <strong>Tests:</strong> whether the /stability findings hold for a
@@ -38,16 +42,21 @@ export default function MediaChromePage() {
           </li>
         </ul>
       </Explainer>
-      <p>
-        Same harness as /stability. resets: <strong>{resets}</strong>
-      </p>
+      <div className="lab-toolbar">
+        <span className="lab-stat" data-hot={resets > 0}>
+          playback resets <strong>{resets}</strong>
+        </span>
+        <span className="lab-hint">
+          Same harness as /stability: press play, then abuse the knobs.
+        </span>
+      </div>
       <StressHarness
         render={(s) => (
           <div>
-            <p>
+            <p className="lab-caption">
               {s.title} (tick {s.tick})
             </p>
-            <media-controller style={{ maxWidth: 480 }}>
+            <media-controller className="lab-media-chrome">
               <video
                 slot="media"
                 src={VIDEO_SRC}
