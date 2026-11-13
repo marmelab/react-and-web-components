@@ -3,5 +3,8 @@ dist/
 *.local
 .DS_Store
 .superpowers/
+.claude/
 notes/
-.claude/settings.local.json
+blog-checks/
+docs/superpowers/
+investigations/

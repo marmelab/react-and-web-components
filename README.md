@@ -3,8 +3,7 @@
 An investigation lab that probes how React 19 handles web components:
 lifecycle, prop/attribute/event passing, stability under re-renders, nesting,
 performance, React Compiler interaction and SSR. Built for a Marmelab hackday
-(2026-07-24). The write-ups (findings, summary, blog draft, spec and plan)
-are kept out of version control, in a gitignored `notes/` folder.
+(2026-07-24).
 
 ## Prerequisites
 
@@ -29,3 +28,7 @@ are kept out of version control, in a gitignored `notes/` folder.
 - `pnpm --filter corp-components build && pnpm --filter consumers dev` →
   enterprise demo at http://localhost:5273 (the build step is required
   because `dist/` is gitignored)
+
+## License
+
+MIT, see [LICENSE](./LICENSE).
